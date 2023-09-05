@@ -1,0 +1,3 @@
+[submodule "SimulationFramework"]
+	path = SimulationFramework
+	url = git@github.com:ALRhub/SimulationFramework.git

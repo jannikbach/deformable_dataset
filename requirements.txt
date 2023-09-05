@@ -1,0 +1,9 @@
+numpy
+pybullet
+pyyaml
+scipy
+opencv-python
+pinocchio
+matplotlib
+gin-config
+gym
