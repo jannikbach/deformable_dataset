@@ -20,9 +20,6 @@ This project generates datasets for deformable objects using PyBullet.
 
 ## File Descriptions
 
-### start.sh
-*Description coming soon.*
-
 ### create_samples.py
 *Description coming soon.*
 
@@ -30,6 +27,12 @@ This project generates datasets for deformable objects using PyBullet.
 *Description coming soon.*
 
 ### aggregate_trajectories.py
+*Description coming soon.*
+
+### deformable_utils.py
+*Description coming soon.*
+
+### start.sh
 *Description coming soon.*
 
 ## Tips and Tricks
