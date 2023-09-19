@@ -155,6 +155,11 @@ def add_stick_to_robot(replica_robot, stick_type='long'):
     # Define paths based on stick type
     assert stick_type in ['default', 'convex', 'long']
     obj_path = os.path.join(os.path.split(__file__)[0], "models", "objects")
+    # the problem right now is that the start position of the robot is defined in create_samples.py, but
+    # the stick form is not. therefore the startpostion and stick form have to be matched by hand.
+    # future action:
+    # give stick type as parameter already created in create_samples.py and
+    # feed the parameter through the functions to set the robot start position (particularly the y-axis param)
     stick_paths = {
         "convex": {
             "urdf": os.path.join(obj_path, "sticky.urdf"),
