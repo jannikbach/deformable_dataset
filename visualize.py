@@ -124,16 +124,8 @@ def main(index=0):
         print("done")
 
     dataset1 = np.load(
-        "./dataset3x300_long.npz"
+        "./data/deformable_dataset_19-09-2023_19-01-16-828407650.npz"
     )
-
-    # mesh1 = dataset1["deformable_mesh"][0][0]
-    # mesh2 = dataset1["deformable_mesh"][1][0]
-    #
-    # smesh1 = dataset1["stick_mesh"][0][0]
-    # smesh2 = dataset1["stick_mesh"][1][0]
-    #
-    # print(mesh1 == mesh2)
 
     print(dataset1["stick_edges"])
     print(dataset1["stick_faces"].shape)

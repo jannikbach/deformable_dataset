@@ -6,8 +6,8 @@ def main(index=0):
     # create sample configs
 
     # Define the number of samples
-    num_samples = 100
-    spring_constant = [100]# [100, 500, 1000]
+    num_samples = 300
+    spring_constant = [100, 500, 1000]
 
     # Generate random data for each column with specified ranges
     x_min = 0.2

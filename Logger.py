@@ -7,6 +7,7 @@ from enum import Flag, auto
 import numpy as np
 
 from alr_sim.core.logger import LoggerBase
+from deformable_utils import get_mesh_data, get_mesh_obj_vertices
 
 
 class PyBulletDeformableDatasetLogger(LoggerBase):
@@ -23,25 +24,25 @@ class PyBulletDeformableDatasetLogger(LoggerBase):
     """
 
     def __init__(
-        self,
-        scene,
-        deformable_id,
-        stick_id,
-        deformable_obj_path,
-        stick_obj_path,
-        anchor_pos,
-        start_pos_stick_xz,
-        spring_elastic_stiffness,
-        spring_damping_stiffness,
-        spring_damping_all_directions,
-        use_neo_hookean,
-        neo_hookean_mu,
-        neo_hookean_lambda,
-        neo_hookean_damping,
-        output_file_path=None,
-        save_data=True,
-        final_time_stamp_count=100,
-        min_y_for_logging=0.15,
+            self,
+            scene,
+            deformable_id,
+            stick_id,
+            deformable_obj_path,
+            stick_obj_path,
+            anchor_pos,
+            start_pos_stick_xz,
+            spring_elastic_stiffness,
+            spring_damping_stiffness,
+            spring_damping_all_directions,
+            use_neo_hookean,
+            neo_hookean_mu,
+            neo_hookean_lambda,
+            neo_hookean_damping,
+            output_file_path=None,
+            save_data=True,
+            final_time_stamp_count=100,
+            min_y_for_logging=0.15,
     ):
         super().__init__()
         """
@@ -103,19 +104,8 @@ class PyBulletDeformableDatasetLogger(LoggerBase):
         """
         log_dict = dict()
 
-        mesh_stick = p.getMeshData(self.stick_id, -1)
-        pos, orn = p.getBasePositionAndOrientation(self.stick_id)
-        vertices = [p.multiplyTransforms(pos, orn, v, orn)[0] for v in mesh_stick[1]]
-
-        def get_mesh_data(sim, deform_id):
-            """Returns num mesh vertices and vertex positions."""
-            kwargs = {}
-            if hasattr(p, "MESH_DATA_SIMULATION_MESH"):
-                kwargs["flags"] = p.MESH_DATA_SIMULATION_MESH
-            num_verts, mesh_vert_positions = sim.getMeshData(deform_id, **kwargs)
-            return num_verts, mesh_vert_positions
-
-        _, mesh_deformable = get_mesh_data(p, self.deformable_id)
+        vertices = get_mesh_obj_vertices(self.stick_id)  # rigid object
+        _, mesh_deformable = get_mesh_data(p, self.deformable_id)  # deformable object
 
         log_dict.update(
             {
@@ -174,7 +164,7 @@ class PyBulletDeformableDatasetLogger(LoggerBase):
 
         if self.logged_time_steps < self.max_time_steps:
             for v in self.log_dict_full.values():
-                del v[self.logged_time_steps :]
+                del v[self.logged_time_steps:]
 
         def extract_edges_from_obj(obj_file_path):
             faces = []
@@ -236,21 +226,21 @@ class PyBulletDeformableDatasetLogger(LoggerBase):
         # drop early time steps #all data points where the tip of the stick is not over y coordinate 0.54 are dropped.
         # this means there are 2135 time steps remaining
         mask = (
-            np.max(self.log_dict_full["stick_mesh"][:, :, 1], axis=1)
-            >= self.min_y_for_logging
+                np.max(self.log_dict_full["stick_mesh"][:, :, 1], axis=1)
+                >= self.min_y_for_logging
         )
 
         assert (
-            self.log_dict_full["stick_mesh"].shape[0]
-            == self.log_dict_full["deformable_mesh"].shape[0]
+                self.log_dict_full["stick_mesh"].shape[0]
+                == self.log_dict_full["deformable_mesh"].shape[0]
         )
 
         for key in ["stick_mesh", "deformable_mesh"]:
             self.log_dict_full[key] = self.log_dict_full[key][mask]
 
         assert (
-            self.log_dict_full["stick_mesh"].shape[0]
-            == self.log_dict_full["deformable_mesh"].shape[0]
+                self.log_dict_full["stick_mesh"].shape[0]
+                == self.log_dict_full["deformable_mesh"].shape[0]
         )
 
         # now we do a subsampling to only get 100 distinct timesteps
@@ -265,8 +255,8 @@ class PyBulletDeformableDatasetLogger(LoggerBase):
 
         assert self.log_dict_full["stick_mesh"].shape[0] == self.final_time_stamp_count
         assert (
-            self.log_dict_full["deformable_mesh"].shape[0]
-            == self.final_time_stamp_count
+                self.log_dict_full["deformable_mesh"].shape[0]
+                == self.final_time_stamp_count
         )
 
         # don't know if this is necessary
@@ -297,8 +287,8 @@ class PyBulletDeformableDatasetLogger(LoggerBase):
 
     def _check_log_interval(self) -> bool:
         if (
-            self.last_log_time is None
-            or self.robot.time_stamp >= self.last_log_time + self.log_interval
+                self.last_log_time is None
+                or self.robot.time_stamp >= self.last_log_time + self.log_interval
         ):
             return True
         return False
