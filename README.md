@@ -9,7 +9,7 @@ This project generates datasets for deformable objects using PyBullet.
     ```
     ./SimulationFramework/install.sh
     ```
-    - During the installation you will be asked if you want to install Mujoco 2.1 Support. You can skip that since we only use pybullet 
+    - During the installation you will be asked if you want to install Mujoco 2.1 Support. You can skip that since we only use `pybullet`.
     - For detailed installation instructions, refer to the ```/SimulationFramework/doc/01_installation.md```.
 
 2. **Generate Dataset**:
@@ -56,7 +56,7 @@ After execution, a CSV file named `samples.csv` will be created in the current d
 
 #### Description
 
-The given Python script focuses on generating and saving trajectories for deformable simulations using the PyBullet physics engine. The main objective is to create a deformable button cloth and move a robot's end effector with an attached stick to simulate interactions, thereby generating a dataset of these interactions.
+The Python script focuses on generating and saving trajectories for deformable simulations using the PyBullet physics engine. The main objective is to create a deformable button cloth and move a robot's end effector with an attached stick to simulate interactions, thereby generating a dataset of these interactions.
 
 #### Getting Started
 
@@ -106,8 +106,6 @@ For example:
 - Only integrates one deformable object (button cloth).
 
 #### Tips & Troubleshooting
-
-- Ensure all required libraries and modules are installed.
 - Adjust the simulation's `time_step` parameter to speed up or slow down the simulation. Making it to big will lead to unrealistic simulations.
 - For different simulation behaviors, tweak the cloth's properties, such as the spring constant or damping values.
 
@@ -115,15 +113,75 @@ For example:
 
 
 ### aggregate_trajectories.py
-*Description coming soon.*
 
-### deformable_utils.py
-*Description coming soon.*
+#### Description
+
+This script processes multiple `.npz` files from the directory `./log_cloth` to aggregate their data based on the `spring_elastic_stiffness` value. The primary objective is to group the data from these files, and store the aggregated data into a new `.npz` file named `dataset3x300_long.npz`.
+
+#### How it works
+
+1. **Directory Initialization**: The script looks for `.npz` files in the directory `./data`.
+2. **Data Processing**:
+    - Each `.npz` file's data is loaded into a dictionary, `data_dict`, indexed by its `spring_elastic_stiffness` value.
+    - For each unique spring value, the script attempts to process up to 300 samples.
+    - The data from each file is appended to a list associated with its spring value in the dictionary.
+3. **Data Aggregation**:
+    - The lists in the dictionary are converted to numpy arrays.
+    - A new dictionary, `final_data`, is created to store the aggregated data arrays.
+    - The arrays from `data_dict` are stacked along a new dimension, with the order determined by the sorted unique spring values.
+    - The spring values themselves are reshaped and stored in `final_data`.
+4. **Data Saving**: The `final_data` dictionary is saved to a new `.npz` file named `dataset3x300_long.npz`.
+
+#### Requirements
+
+- Python 3.9
+- Libraries: `os`, `numpy`
+
+#### Usage
+
+1. Ensure that the directory `./data` contains the `.npz` files you want to process.
+2. Run the script.
+
+After the script completes its execution, you should find a new `.npz` file named `dataset.npz` in the current directory.
+
+
 
 ### start.sh
-*Description coming soon.*
+
+#### Description
+
+This bash script orchestrates the process of sample creation, trajectory execution, and data aggregation. It reads parameters from a CSV file and uses them to execute Python scripts for trajectory generation and data aggregation. The workflow can be summarized as follows:
+
+1. Invoke the `create_samples.py` script to generate sample parameters.
+2. Process each line of the generated `samples.csv` file as parameters for trajectory generation.
+3. For each line in `samples.csv`, invoke the `run_trajectory.py` script with the extracted parameters.
+4. After processing a line from the CSV, the line is removed.
+5. After all lines are processed and `samples.csv` is empty, the file is deleted.
+6. Invoke the `aggregate_trajectories.py` script to collect and aggregate trajectory data.
+
+#### How it works
+
+1. **Sample Creation**: 
+    - The script starts by running `create_samples.py`.
+    - This is expected to produce a `samples.csv` file with parameters for trajectories.
+2. **Trajectory Execution**:
+    - For each line in `samples.csv`, the script extracts four parameters.
+    - It then calls `run_trajectory.py` with these parameters.
+    - After a line is processed, it's removed from the CSV file.
+3. **Data Aggregation**:
+    - Once all lines from the CSV are processed and the file is empty, it's deleted.
+    - The script then runs `aggregate_trajectories.py` to process and aggregate the trajectory data.
+
+#### Usage
+
+1. Ensure the Python scripts (`create_samples.py`, `run_trajectory.py`, and `aggregate_trajectories.py`) are in the same directory as this bash script.
+2. Make the bash script executable: `chmod +x start.sh`
+3. Run the script: `./start.sh`
+
+
 
 ## Tips and Tricks
 
 1. **Use Deformable World in PyBullet**: When working with deformable objects, it's recommended to use the deformable world feature in PyBullet.
 2. **PyBullet Deformable Documentation**: Documentation on PyBullet's deformable features can be found in the [pybullet quickstart guide](https://raw.githubusercontent.com/bulletphysics/bullet3/master/docs/pybullet_quickstartguide.pdf).
+3. **Resetting the pybullet Simulation**: Resetting the deformable simulation is buggy. It only detects one trajectory, even if you run the experiment several times. The simulation has to be rerun for every trajectory.
