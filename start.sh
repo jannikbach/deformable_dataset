@@ -16,7 +16,7 @@ do
     IFS=',' read -ra params <<< "$line"
 
     # Call the Python script with the parameters
-    python Demo_Cloth_defromable_push.py ${params[0]} ${params[1]} ${params[2]} ${params[3]}
+    python run_trajectory.py ${params[0]} ${params[1]} ${params[2]} ${params[3]}
 
     # Remove the first line from the file
     sed -i '1d' $file
@@ -25,4 +25,4 @@ done
 # Remove the csv file
 rm $file
 
-python Demo_Cloth_sum3x300.py
+python aggregate_trajectories.py
