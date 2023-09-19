@@ -6,7 +6,7 @@ import numpy as np
 data_dict = {}
 
 # Directory where the .npz files are located
-directory_path = "./log_cloth"
+directory_path = "./data"
 
 num_samples = 300
 
@@ -44,4 +44,4 @@ final_data["spring_elastic_stiffness"] = np.array(unique_spring_values)[:, np.ne
 
 
 # Save the final data to a new .npz file
-np.savez("dataset3x300_long.npz", **final_data)
+np.savez("dataset.npz", **final_data)
