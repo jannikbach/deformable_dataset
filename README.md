@@ -1,6 +1,4 @@
 # deformable_dataset
 
-```cd SimulationFramework```
-``` bash install.sh```
-``` cd ..```
+```bash ./SimulationFramework/install.sh```
 ``` bash start.sh```
