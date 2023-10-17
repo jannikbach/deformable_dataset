@@ -11,6 +11,7 @@ This project generates datasets for deformable objects using PyBullet.
     ```
     - During the installation you will be asked if you want to install Mujoco 2.1 Support. You can skip that since we only use `pybullet`.
     - For detailed installation instructions, refer to the ```/SimulationFramework/doc/01_installation.md```.
+    - Make sure to use the conda environment created during the installation.
 
 2. **Generate Dataset**:
     - Once the installation is complete, generate the dataset by running:
@@ -116,7 +117,7 @@ For example:
 
 #### Description
 
-This script processes multiple `.npz` files from the directory `./log_cloth` to aggregate their data based on the `spring_elastic_stiffness` value. The primary objective is to group the data from these files, and store the aggregated data into a new `.npz` file named `dataset3x300_long.npz`.
+This script processes multiple `.npz` files from the directory `./data` to aggregate their data based on the `spring_elastic_stiffness` value. The primary objective is to group the data from these files, and store the aggregated data into a new `.npz` file named `dataset.npz`.
 
 #### How it works
 
@@ -130,7 +131,7 @@ This script processes multiple `.npz` files from the directory `./log_cloth` to 
     - A new dictionary, `final_data`, is created to store the aggregated data arrays.
     - The arrays from `data_dict` are stacked along a new dimension, with the order determined by the sorted unique spring values.
     - The spring values themselves are reshaped and stored in `final_data`.
-4. **Data Saving**: The `final_data` dictionary is saved to a new `.npz` file named `dataset3x300_long.npz`.
+4. **Data Saving**: The `final_data` dictionary is saved to a new `.npz` file named `dataset.npz`.
 
 #### Requirements
 
