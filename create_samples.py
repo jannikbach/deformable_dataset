@@ -18,7 +18,7 @@ def main(index=0):
     x = np.random.uniform(x_min, x_max, len(spring_constant) * num_samples).reshape(
         -1, 1
     )
-    y = np.full((len(spring_constant) * num_samples, 1), -0.3)
+    y = np.full((len(spring_constant) * num_samples, 1), -0.1) #-0.1 for regular stick
     z = np.random.uniform(z_min, z_max, len(spring_constant) * num_samples).reshape(
         -1, 1
     )
