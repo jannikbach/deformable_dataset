@@ -3,17 +3,27 @@ from abc import ABC, abstractmethod
 import pybullet as p
 
 
+# Abstract Base Class for Robot Objects
 class RobotObject(ABC):
 
     @abstractmethod
     def load(self):
+        """
+        Abstract method to be implemented by subclasses for loading the robot object into the simulation.
+        """
         pass
 
     @abstractmethod
     def update_y(self, y):
+        """
+        Abstract method to be implemented by subclasses for updating the y-coordinate of the robot object.
+
+        Args:
+        - y (float): The y-coordinate value.
+        """
         pass
 
-
+# Class for simulating a Standard Stick object attached to a robot
 class Stick(RobotObject):
 
     def __init__(self, robot):
@@ -74,9 +84,20 @@ class Stick(RobotObject):
         return self.stick_id, self.constraint_id, self.stick_obj
 
     def update_y(self, y):
+        """
+        Overrides the abstract method from RobotObject.
+        In this implementation, the method simply returns the input y-coordinate value without modification.
+
+        Args:
+        - y (float): The y-coordinate value.
+
+        Returns:
+        - float: The unmodified y-coordinate value.
+        """
         return y
 
 
+# Class for simulating a Long Stick object attached to a robot
 class LongStick(RobotObject):
 
     def __init__(self, robot):
@@ -137,10 +158,21 @@ class LongStick(RobotObject):
         return self.stick_id, self.constraint_id, self.stick_obj
 
     def update_y(self, y):
+        """
+        Overrides the abstract method from RobotObject.
+        In this implementation, the method reduces the y values by 0.2, because of the increased length of the long stick.
+
+        Args:
+        - y (float): The y-coordinate value.
+
+        Returns:
+        - float: The unmodified y-coordinate value.
+        """
         y -= 0.2
         return y
 
 
+# Class for simulating a Convex Stick object attached to a robot
 class ConvexStick(RobotObject):
 
     def __init__(self, robot):
@@ -201,6 +233,16 @@ class ConvexStick(RobotObject):
         return self.stick_id, self.constraint_id, self.stick_obj
 
     def update_y(self, y):
+        """
+        Overrides the abstract method from RobotObject.
+        In this implementation, the method simply returns the input y-coordinate value without modification.
+
+        Args:
+        - y (float): The y-coordinate value.
+
+        Returns:
+        - float: The unmodified y-coordinate value.
+        """
         return y
 
 

@@ -64,7 +64,7 @@ The Python script focuses on generating and saving trajectories for deformable s
 ##### Requirements:
 
 - `alr_sim` library
-- Additional custom modules: `Logger`, `deformable_utils`
+- Additional custom modules: `Logger`, `deformable_utils`, `DeformableObject`, `RobotObject`
 
 ##### Execution
 
