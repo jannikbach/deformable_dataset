@@ -57,59 +57,62 @@ After execution, a CSV file named `samples.csv` will be created in the current d
 
 #### Description
 
-The Python script focuses on generating and saving trajectories for deformable simulations using the PyBullet physics engine. The main objective is to create a deformable button cloth and move a robot's end effector with an attached stick to simulate interactions, thereby generating a dataset of these interactions.
+This Python script is designed to generate and save trajectories for deformable simulations using the PyBullet physics engine. Its primary objective is to simulate interactions between a deformable button cloth and a robot's end effector equipped with a stick, thereby creating a dataset of these interactions.
 
 #### Getting Started
 
 ##### Requirements:
 
+- `pybullet`
 - `alr_sim` library
-- Additional custom modules: `Logger`, `deformable_utils`, `DeformableObject`, `RobotObject`
-
+- Additional custom modules: `DeformableObject`, `RobotObject`, `Logger`
+  
 ##### Execution
 
-To run the script, you need to provide four float arguments: x, y, z coordinates, and spring constant:
-```python run_trajectory.py <x> <y> <z> <spring_constant>```
+To execute the script, provide four float arguments: x, y, z coordinates, and spring constant:
+```
+python run_trajectory.py <x> <y> <z> <spring_constant>
+```
 For example:
-```python trajectory_generation.py 0.5 0.2 0.3 100```
-
+```
+python run_trajectory.py 0.5 0.2 0.3 100
+```
 
 #### Functional Overview
 
 ##### Main Function
 
-- Initializes the simulation environment.
-- Loads a deformable button cloth into the scene.
-- Calculates anchor positions on the cloth.
-- Attaches anchors to the deformable cloth.
-- Adds a stick to the robot's end effector.
-- Calls the `create_and_save_trajectory` function to generate the trajectory and log the data.
+- Sets up the PyBullet simulation environment with the specified time step.
+- Loads a deformable button cloth into the scene and creates anchor positions.
+- Loads a stick to the robot's end effector.
+- Constructs a trajectory object to handle the simulation and logging.
+- Executes the trajectory to generate and save the interaction data.
 
-##### `create_and_save_trajectory` Function
+##### `Trajectory` Class
 
-- Moves the robot's end effector to a starting position.
-- Initializes a logger to extract and save deformable data.
-- Starts logging the simulation data.
-- Directs the robot to go to a certain position in the simulation, simulating the interaction.
-- Stops logging and saves the trajectories of the interacting objects.
+- Initializes various parameters for the simulation, including spring stiffness, damping, and Neo-Hookean parameters.
+- Has a `create_and_save` method which:
+  - Moves the robot's end effector to a starting position.
+  - Initializes a logger (using `PyBulletDeformableDatasetLogger`) to extract and save deformable interaction data.
+  - Begins the simulation, logs the data, and guides the robot to interact with the cloth.
+  - Ends the logging and saves the trajectory data.
 
 #### Important Notes
 
-1. The script utilizes the `PyBulletDeformableDatasetLogger` from `Logger.py` for logging purposes. This class inherits from `alr_sim.core.logger.LoggerBase`.
-2. The cloth is loaded as a soft body with various parameters like spring stiffness, damping, and Neo-Hookean parameters, which can be adjusted as needed.
-3. The anchors created are static objects used to attach specific vertices of the cloth. They act as fixed points.
-4. The robot's end effector is equipped with a stick to interact with the cloth.
-5. Trajectory data is saved in the `./data` directory by default.
+1. The logger, `PyBulletDeformableDatasetLogger`, is used to save the trajectory data and inherits functionalities from the `alr_sim` library.
+2. The cloth is loaded as a soft body with adjustable parameters including spring stiffness, damping, and Neo-Hookean attributes.
+3. The anchor objects on the cloth are static and used to attach specific vertices of the cloth, functioning as fixed points.
+4. The trajectory data is saved in the `./data` directory by default.
 
 #### Limitations
 
-- Only implements straight forward interactions.
-- Only integrates one deformable object (button cloth).
+- The interactions are straightforward and linear.
+- Only one deformable object, the button cloth, is integrated into the simulation.
 
 #### Tips & Troubleshooting
-- Adjust the simulation's `time_step` parameter to speed up or slow down the simulation. Making it to big will lead to unrealistic simulations.
-- For different simulation behaviors, tweak the cloth's properties, such as the spring constant or damping values.
 
+- Adjusting the simulation's `time_step` parameter can speed up or slow down the simulation. However, setting it too high can lead to unrealistic results.
+- Modify the cloth's properties, such as the spring constant or damping values, to achieve different simulation behaviors.
 
 
 
